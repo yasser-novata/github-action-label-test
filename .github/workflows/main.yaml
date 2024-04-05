@@ -1,0 +1,10 @@
+name: "Pull Request Labeler"
+on:
+  - pull_request_target # Using pull_request_target instead of pull_request ensures actions use the target branch workflow
+
+
+jobs:
+  main:
+    runs-on: ubuntu
+    steps:
+      - run: ${{github.workspace}}/script.sh
