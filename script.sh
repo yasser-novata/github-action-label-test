@@ -2,4 +2,3 @@
 
 printenv
 echo "w00t!"
-
