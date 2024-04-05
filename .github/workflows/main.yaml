@@ -7,4 +7,4 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - run: ${{github.workspace}}/script.sh
+      - run: ./script.sh
