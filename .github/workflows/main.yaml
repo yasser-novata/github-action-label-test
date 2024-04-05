@@ -21,8 +21,8 @@ jobs:
       - name: Extract label details
         id: extract_labels
         run: |
-          LABEL_NAME=$(echo "${GITHUB_EVENT_NAME}" | jq -r '.label.name')
-          USER=$(echo "${GITHUB_EVENT_NAME}" | jq -r '.sender.login')
+          LABEL_NAME=$(jq -r '.label.name' <<< "${{ github.event }}")
+          USER=$(jq -r '.sender.login' <<< "${{ github.event }}")
           echo "::set-output name=label_name::${LABEL_NAME}"
           echo "::set-output name=user::${USER}"
 
