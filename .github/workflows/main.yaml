@@ -7,6 +7,8 @@ on:
 jobs:
   find_label_adder:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -15,7 +17,7 @@ jobs:
         run: |
           PR_NUMBER=$(echo "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')
           API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}"
-          PR_DATA=$(curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" "${API_URL}")
+          PR_DATA=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "${API_URL}")
           echo "::set-output name=pr_data::${PR_DATA}"
 
       - name: Extract label details
