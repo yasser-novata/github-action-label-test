@@ -7,4 +7,4 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - run: ./script.sh
+      - run: bash ./script.sh
