@@ -1,9 +1,35 @@
 name: "Run Script"
 on:
-  - pull_request_target # Using pull_request_target instead of pull_request ensures actions use the target branch workflow
+  pull_request_target: # Using pull_request_target instead of pull_request ensures actions use the target branch workflow
+    types: [labeled]
 
 
 jobs:
+  find_label_adder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Fetch pull request details
+        run: |
+          PR_NUMBER=$(echo "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}"
+          PR_DATA=$(curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" "${API_URL}")
+          echo "::set-output name=pr_data::${PR_DATA}"
+
+      - name: Extract label details
+        id: extract_labels
+        run: |
+          LABEL_NAME=$(echo "${GITHUB_EVENT_NAME}" | jq -r '.label.name')
+          USER=$(echo "${GITHUB_EVENT_NAME}" | jq -r '.sender.login')
+          echo "::set-output name=label_name::${LABEL_NAME}"
+          echo "::set-output name=user::${USER}"
+
+      - name: Who added the label?
+        run: |
+          echo "The label '${{ steps.extract_labels.outputs.label_name }}' was added by ${{ steps.extract_labels.outputs.user }}"
+
   main:
     runs-on: ubuntu-latest
     steps:
