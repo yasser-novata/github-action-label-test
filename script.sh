@@ -2,5 +2,5 @@
 
 printenv
 echo
-echo "---"
+echo "----"
 echo "w00t!"
