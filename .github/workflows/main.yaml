@@ -34,7 +34,6 @@ jobs:
   main:
     runs-on: ubuntu-latest
     needs: find_label_adder
-    if: needs.find_label_adder.outputs.label-name == 'enhancement' && needs.find_label_adder.outputs.pr-opened-by != needs.find_label_adder.outputs.user
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.1.1
