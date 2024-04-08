@@ -1,0 +1,13 @@
+name: "Run Script"
+on:
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+      - run: ./script.sh
