@@ -7,6 +7,7 @@ on:
 jobs:
   find_label_adder:
     runs-on: ubuntu-latest
+    environment: terraform
     outputs:
       label-name: ${{ steps.extract_labels.outputs.label-name }}
       user: ${{ steps.extract_labels.outputs.user }}
