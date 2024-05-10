@@ -4,3 +4,4 @@ printenv
 echo
 echo "----"
 echo "w00t!"
+echo "----"
