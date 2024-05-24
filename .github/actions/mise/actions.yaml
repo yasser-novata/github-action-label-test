@@ -1,0 +1,44 @@
+name: 'Use mise'
+description: 'Install mise+tool and store in cache'
+inputs:
+  data-dir:
+    description: "Location of MISE_DATA_DIR"
+    required: false
+    default: "/tmp/.mise"
+outputs:
+  cache-key:
+    description: "Cache key"
+    value: ${{ steps.set-vars.outputs.CACHE_KEY }}
+  data-dir:
+    description: "Location of MISE_DATA_DIR"
+    value: ${{ steps.set-vars.outputs.MISE_DATA_DIR }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.5
+      with:
+        fetch-depth: 0
+
+    - name: Set Variables
+      id: set-vars
+      shell: bash
+      run: |
+        echo "MISE_DATA_DIR=${{ inputs.data-dir }}" >> "${GITHUB_OUTPUT}"
+        echo "CACHE_KEY=mise-${{ runner.os }}.${{ runner.arch }}-${{ hashFiles('.tool-versions', '.mise.toml', '.nvmrc') }}" >> "${GITHUB_OUTPUT}"
+
+    - name: Cache mise
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.set-vars.outputs.MISE_DATA_DIR }}
+        key: ${{ steps.set-vars.outputs.CACHE_KEY }}
+
+    - uses: jdx/mise-action@v2
+      with:
+        mise_dir: "${{ steps.set-vars.outputs.MISE_DATA_DIR }}"
+        cache: false
+
+    - name: Set mise paths
+      run: |
+        echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/bin" >> $GITHUB_PATH
+        echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/shims" >> $GITHUB_PATH

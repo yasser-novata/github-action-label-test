@@ -13,8 +13,19 @@ jobs:
       user: ${{ steps.extract_labels.outputs.user }}
       pr-opened-by: ${{ steps.extract_labels.outputs.pr-opened-by }}
     steps:
+      - id: mise
+        uses: ./.github/actions/mise
+
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Use cached mise
+        uses: actions/cache@v4
+        with:
+          path: "${{ steps.mise.outputs.data-dir }}"
+          key: ${{ steps.mise.outputs.cache-key }}
+
+      - run: echo $PATH
 
       - name: Extract label details
         id: extract_labels
