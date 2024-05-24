@@ -39,6 +39,7 @@ runs:
         cache: false
 
     - name: Set mise paths
+      shell: bash
       run: |
         echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/bin" >> $GITHUB_PATH
         echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/shims" >> $GITHUB_PATH
