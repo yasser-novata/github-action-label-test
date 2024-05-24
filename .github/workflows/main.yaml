@@ -1,6 +1,6 @@
 name: "Run Script"
 on:
-  pull_request_target: # Using pull_request_target instead of pull_request ensures actions use the target branch workflow
+  pull_request: # Using pull_request_target instead of pull_request ensures actions use the target branch workflow
     types: [labeled]
 
 
