@@ -25,7 +25,11 @@ jobs:
           path: "${{ steps.mise.outputs.data-dir }}"
           key: ${{ steps.mise.outputs.cache-key }}
 
-      - run: echo $PATH
+      - run: |
+          echo $PATH
+          tofu --version
+          yq --version
+          npm --version
 
       - name: Extract label details
         id: extract_labels
