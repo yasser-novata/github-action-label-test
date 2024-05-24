@@ -25,20 +25,23 @@ runs:
       shell: bash
       run: |
         echo "MISE_DATA_DIR=${{ inputs.data-dir }}" >> "${GITHUB_OUTPUT}"
-        echo "CACHE_KEY=mise-${{ runner.os }}.${{ runner.arch }}-${{ hashFiles('.tool-versions', '.mise.toml', '.nvmrc') }}" >> "${GITHUB_OUTPUT}"
+        echo "MISE_DATA_DIR=${{ inputs.data-dir }}" >> "${GITHUB_ENV}"
+        echo "CACHE_KEY=mise-${{ runner.os }}.${{ runner.arch }}-${{ hashFiles('.mise.*.toml', '.mise/config.toml', '.tool-versions', '.mise.toml', '.nvmrc') }}" >> "${GITHUB_OUTPUT}"
 
     - name: Cache mise
+      id: cache-mise
       uses: actions/cache@v4
       with:
         path: ${{ steps.set-vars.outputs.MISE_DATA_DIR }}
         key: ${{ steps.set-vars.outputs.CACHE_KEY }}
 
     - uses: jdx/mise-action@v2
+      if: steps.cache-mise.outputs.cache-hit != 'true'
       with:
-        mise_dir: "${{ steps.set-vars.outputs.MISE_DATA_DIR }}"
         cache: false
 
     - name: Set mise paths
+      shell: bash
       run: |
         echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/bin" >> $GITHUB_PATH
         echo "${{ steps.set-vars.outputs.MISE_DATA_DIR }}/shims" >> $GITHUB_PATH
