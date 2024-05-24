@@ -28,15 +28,16 @@ runs:
         echo "MISE_DATA_DIR=${{ inputs.data-dir }}" >> "${GITHUB_ENV}"
         echo "CACHE_KEY=mise-${{ runner.os }}.${{ runner.arch }}-${{ hashFiles('.tool-versions', '.mise.toml', '.nvmrc') }}" >> "${GITHUB_OUTPUT}"
 
-    - name: Cache mise
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.set-vars.outputs.MISE_DATA_DIR }}
-        key: ${{ steps.set-vars.outputs.CACHE_KEY }}
+        #    - name: Cache mise
+        #      uses: actions/cache@v4
+        #      with:
+        #        path: ${{ steps.set-vars.outputs.MISE_DATA_DIR }}
+        #        key: ${{ steps.set-vars.outputs.CACHE_KEY }}
 
     - uses: jdx/mise-action@v2
       with:
-        cache: false
+        cache: true
+        cache_key_prefix: ${{ steps.set-vars.outputs.CACHE_KEY }}
 
     - name: Set mise paths
       shell: bash
